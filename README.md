@@ -1,31 +1,45 @@
-# Etl
+require 'rubygems'
+require 'etl'
 
-TODO: Write a gem description
+module SomeEtl
+  extend Etl::Workflow
 
-## Installation
+  module Extract
+    extend Etl::Stage
 
-Add this line to your application's Gemfile:
+    initialize_with do
+      {}
+    end
 
-```ruby
-gem 'etl'
-```
+    step do |state|
+      state[1] = 1
+      state
+    end
 
-And then execute:
+    step do |state|
+      state[2] = 3
+      state
+    end
+  end
 
-    $ bundle
+  module Transform
+    extend Etl::Stage
 
-Or install it yourself as:
+    step do |state|
+      state[3] = 1
+      state
+    end
 
-    $ gem install etl
+    step do |state|
+      state[:bar] = 3
+      state
+    end
+  end
 
-## Usage
+  workflow Extract,Transform
 
-TODO: Write usage instructions here
+end
 
-## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/etl/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+puts SomeEtl.run.inspect
+

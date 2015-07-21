@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.name          = "etl"
   spec.version       = Etl::VERSION
   spec.authors       = ["Alexander Petrov"]
-  spec.email         = ["alexonrails@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.email         = ["apetrov@virool.com"]
+  spec.summary       = %q{Extract Transform Load toolkit}
+  spec.description   = %q{A DSL to define ETL workflow with ruby}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -19,5 +19,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.7"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "> 0.8.6"
 end
