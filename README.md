@@ -1,4 +1,13 @@
 This gem provide a DSL to describe Extract Transform Load Workflows.
+
+Means of abstraction.
+* Workflow
+
+Means of Combination
+* Workflow might consist of steps
+* Workflow might consist of workflows
+
+
 Designed with a regard to:
 Single Responsiblity. Workflow, Stage and step have one responsibility
 High cohision. Stages and steps communicate with each other via contract
@@ -16,7 +25,7 @@ Stage is module that chains one or several steps together and return their resul
 ```
 module Test
   extend Etl::Stage
-  3.times do 
+  3.times do
     step do |i|
       puts i
       i + 1
@@ -25,7 +34,7 @@ module Test
 end
 Test.run(1)
 ```
-yields: 
+yields:
 ```
 1
 2
@@ -56,7 +65,7 @@ require 'etl'
 
 module SomeEtl
   extend Etl::Workflow
-  
+
   class State
     attr_accessor :users, :contracts, :invoices, :groups
   end
@@ -86,20 +95,20 @@ module SomeEtl
       state.invoices = calculate(state.users, state.contracts)
       state
     end
-    
+
     step 'Group invoices by user' do |state|
       state.groups = state.invoices.group_by(&:user_id)....
       state
     end
-    
+
     def caclulate(users, contracts)
       # <scary logic goes here>
     end
   end
-  
+
   module Load
     extend Etl::Stage
-    
+
     step 'Persist to db' do |state|
       Invoice.transaction do
         state.invoices.each do |invoice|
@@ -107,7 +116,7 @@ module SomeEtl
         end
       end
     end
-    
+
     step 'Send notifications' do |state|
       state.groups.each do |user, invoice|
         UserMailer.deliver_invoice(user, invoice)
