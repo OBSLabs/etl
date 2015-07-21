@@ -1,3 +1,8 @@
+This gem provide a DSL to describe Extract Transform Load Workflows.
+
+
+
+```
 require 'rubygems'
 require 'etl'
 
@@ -37,9 +42,7 @@ module SomeEtl
   end
 
   workflow Extract,Transform
-
 end
 
-
 puts SomeEtl.run.inspect
-
+```
