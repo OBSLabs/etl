@@ -1,4 +1,10 @@
 This gem provide a DSL to describe Extract Transform Load Workflows.
+Designed with a regard to:
+Single Responsiblity. Workflow, Stage and step have one responsibility
+High cohision. Stages and steps communicate with each other via contract
+Low coupling. Stages and steps are not aware about each other. Each stage could be used independently.
+Modularity. Each stage has well defined interface which is a great subject to test.
+Pattern. The one way to implement ETL. Valuable in a large projects.
 
 
 DSL has three abstractions
@@ -28,7 +34,7 @@ yields:
 and returns `3`
 
 
-Step is operation over the copy of the state passed to the block and always return the latest version of the state.
+Step is operation over the copy of the state object passed to the block and returning the latest the state object.
 step do |state|
   state[:data] = File.read('foo.bar')
   state
