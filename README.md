@@ -43,27 +43,31 @@ Transform transforming data
 Load creating records in database or uploading on s3.
 
 
-```
+```ruby
 require 'rubygems'
 require 'etl'
 
 module SomeEtl
   extend Etl::Workflow
+  
+  class State
+    attr_accessor :users, :contracts, :invoices, :groups
+  end
 
   module Extract
     extend Etl::Stage
 
     initialize_with do
-      {}
+      State.new
     end
 
-    step do |state|
-      state[1] = 1
+    step 'find users' do |state|
+      state.users = User.find(:all)
       state
     end
 
-    step do |state|
-      state[2] = 3
+    step 'find contracts' do |state|
+      state.contracts = Contract.active.where(user_id: state.users.map(&:id))
       state
     end
   end
@@ -71,18 +75,39 @@ module SomeEtl
   module Transform
     extend Etl::Stage
 
-    step do |state|
-      state[3] = 1
+    step 'Caclulate invoices' do |state|
+      state.invoices = calculate(state.users, state.contracts)
       state
     end
-
-    step do |state|
-      state[:bar] = 3
+    
+    step 'Group invoices by user' do |state|
+      state.groups = state.invoices.group_by(&:user_id)....
       state
+    end
+    
+    def caclulate(users, contracts)
+      # <scary logic goes here>
     end
   end
+  
+  module Load
+    extend Etl::Stage
+    
+    step 'Persist to db' do |state|
+      Invoice.transaction do
+        state.invoices.each do |invoice|
+          invoice.save!
+        end
+      end
+    end
+    
+    step 'Send notifications' do |state|
+      state.groups.each do |user, invoice|
+        UserMailer.deliver_invoice(user, invoice)
+      end
+    end
 
-  workflow Extract,Transform
+  workflow Extract,Transform, Load
 end
 
 puts SomeEtl.run.inspect
