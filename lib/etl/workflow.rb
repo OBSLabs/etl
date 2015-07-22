@@ -25,6 +25,18 @@ module Etl
       @__steps << Proc.new(&block)
     end
 
+    def update(attr,*args, &block)
+      step(args) do |state|
+        value = yield(state)
+        if state.respond_to?('[]=')
+          state[attr] = value
+        else
+          state.send("#{attr}=",value)
+        end
+        state
+      end
+    end
+
     # DSL statement
     def initialize_with(&block)
       @__initialize_with = Proc.new(&block)
