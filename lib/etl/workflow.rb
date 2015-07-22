@@ -37,6 +37,13 @@ module Etl
       end
     end
 
+    def push(*args, &block)
+      step(args) do |state|
+        yield(state)
+        state
+      end
+    end
+
     # DSL statement
     def initialize_with(&block)
       @__initialize_with = Proc.new(&block)
