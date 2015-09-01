@@ -4,36 +4,69 @@ Virool ETL is an approach to DSL organization.
 ### How it works
 
 Workflow is a sequential set of neccessary & sufficient operations to load the data into the end target. 
-It is the stand alone unit that has a clear entry point (inital state), set of operations and end target.
-set of operations could be grouped into 3 parts
+Workflow is stateless and state is passed from one step/workflow to another. The root workflow defines the initial state. 
+Workflow is a stand alone component that has a single entry point (inital state), set of operations to accomplish the end goal.
+set of operations could be grouped into 3 parts.
 
 Part | Responsibility | Typical actions
----|---|---
+:---|:---|:---
 Extract | Extracts data from the source system, normalizes and combines it together. | SQL select, read file, HTTP GET request, S3 read, redis read, group array by ID, map hash into object.
----|---|---
-
-* Transform
-Transforms extracted data according end target format.
-
-
-* Load
-Load data to into the end target system.
+Transform | Transforms extracted data according end target format. | map, reduce, transform 
+Load | Load data to into the end target system. | SQL insert/update/delete, write file, HTTP POST request, S3 write, redis write 
 
 None of the parts know about each other and the workflow is something that conduct communication between them.
-Each part consists of one or several steps which are mutually independend and part conduct communication between them.
+Each part consists of one or several steps which are mutually independend and data fall from one step into another.
+
+### Composing steps to make workflow
+Step is a atomic part of a workflow. There could be any number of steps in workflow. Each step is a stateless ruby block that receive a state object as a single argument and returns a new version of the state.
+Workflow could be evaluated by sequentially evaluating each of its steps:
+* take the initial value
+* eval first step with initial value as a state.
+* eval second step with a value that first step returned
+* ...
+* the result of the last step is a result of Workflow evaluation.
+
+```ruby
+step :a do |s|
+...
+end
+
+step :b do |s|
+...
+end
+
+step :c do |s|
+...
+end
+```
+is an equivalent of `c(b(a(...)))` or in clojure `->> ... (a) (b) (c)`
+
+
+### Composing workflows
+Workflow might be a composition of serveral workflows. In this case workflow behave the same way as a regular step.
+
+```ruby
+module Workflow
+  module A
+  ...
+  end
+
+  module B
+  ...
+  end
+
+  module C
+  ...
+  end
+  workflow A, B, C
+end
+```
+is equvalent of `C.call(B.call(A.call)))`
+The root workflow is responsible for definition of the initial state and providing a clear entry point (public interface).
 
 
 
 
-The first part of ETL process involves extracting data from the source system
-
-workflow is broken under independant pieces (usually it is Extract, Transform and Load).
-
-
-
-Each piece (is a workflow by itself) consist one or several steps.
-Root Workflow initialize the initial state and passes it though the
-State gets into the first step.
 * Incremental state
 State is a object that goes in to the step and step returns the next value of state.
 State can be mutable and immutable at sole discression.
