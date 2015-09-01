@@ -101,6 +101,20 @@ update :foo do |state|
 end
 ```
 
+##### Perform side effect operation
+```ruby
+step do |state|
+  S3.upload(state.foo)
+  state
+end
+```
+is equivalent to:
+```ruby
+push do |state|
+  S3.upload(state.foo)
+end
+```
+
 ### Testing
 Workflow has a "#[]" accessor to steps that returns lambda so step could be tested as regular ruby method:
 ```ruby
@@ -118,19 +132,7 @@ expect(Foo[:inc].call(5)).to eq(6)
 ...
 ```
 
-##### Perform side effect operation
-```ruby
-step do |state|
-  S3.upload(state.foo)
-  state
-end
-```
-is equivalent to:
-```ruby
-push do |state|
-  S3.upload(state.foo)
-end
-```
+
 
 ### Example workflow
 
