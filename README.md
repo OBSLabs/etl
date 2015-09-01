@@ -1,4 +1,5 @@
 Virool ETL is an approach of threading state through sequence of stateless data transformation operations.
+It provides a lightweight DSL (>100 lines of code) and the result code is absolutely linear and easy to understand. 
 
 Designed with a regard to:
 * Single Responsiblity. Workflows and steps have one responsibility.
@@ -131,6 +132,7 @@ could be tested with:
 expect(Foo[:inc].call(5)).to eq(6)
 ...
 ```
+As long each step is using only a trivial portion of state it's very simple to mock it. That's very helpful when testing transformation logic without any external adapter.
 
 
 
