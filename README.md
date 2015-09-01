@@ -45,7 +45,7 @@ step :c do |s|
 ...
 end
 ```
-is an equivalent of `c(b(a(...)))` or in clojure `->> ... (a) (b) (c)`
+is an equivalent of `c(b(a(...)))` or in clojure `(->> ... (a) (b) (c))`
 
 
 ### Composing workflows
