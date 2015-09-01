@@ -2,13 +2,21 @@ Virool ETL is an approach to DSL organization.
 
 
 ### How it works
-Workflow is a sequential set of neccessary & sufficient operations to load the data into the end target.
+
+Workflow is a sequential set of neccessary & sufficient operations to load the data into the end target. 
 It is the stand alone unit that has a clear entry point (inital state), set of operations and end target.
 set of operations could be grouped into 3 parts
-* Extract
-Extracts data from the source system, normalizes and combines it together.
+
+---|-----|-----
+Part | Responsibility | Typical actions
+---|-----|-----
+Extract | Extracts data from the source system, normalizes and combines it together. | SQL select, read file, HTTP GET request, S3 read, redis read, group array by ID, map hash into object.
+
+
 * Transform
-Transform extracted data according its end target format.
+Transforms extracted data according end target format.
+
+
 * Load
 Load data to into the end target system.
 
