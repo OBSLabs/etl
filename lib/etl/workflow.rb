@@ -17,7 +17,7 @@ module Etl
     # @return [Object] that represent final state of the workflow
     def call(state)
       state = state || default_state
-      subject = workflows + steps.values
+      subject = workflows + steps
       subject.inject(state) do |s, workflow_or_lambda|
         workflow_or_lambda.call(s)
       end
@@ -35,9 +35,8 @@ module Etl
     # @yieldparam state [Object] the current state
     # @yieldreturn [Object] the next iteration of the state
     def step(name=:no_name, *args,&block)
-      steps[name] = Proc.new(&block)
-      method_name = [:step,name].join('_')
-      define_method(method_name, &block)
+      steps<<Proc.new(&block)
+      procs[name.to_sym] = Proc.new(&block)
       extend self # necessary add method definition
     end
 
@@ -72,8 +71,16 @@ module Etl
       @__workflow ||= []
     end
 
+    def [](step)
+      procs[step.to_sym]
+    end
+
     def steps
-      @__steps ||= {}
+      @__steps ||= []
+    end
+
+    def procs
+      @__procs ||= {}
     end
 
     # DSL statement

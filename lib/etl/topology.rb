@@ -8,7 +8,7 @@ module Etl
           sep = d.include?("#") ? '::' : '#'
           [mod.name,d].join(sep)
         end
-      end.flatten + workflow.steps.keys.map(&:to_s)
+      end.flatten + workflow.procs.keys.map(&:to_s)
     end
   end
 end

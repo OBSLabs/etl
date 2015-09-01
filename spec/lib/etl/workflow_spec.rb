@@ -7,10 +7,18 @@ describe Etl::Workflow do
     end
   end
 
-  describe ".call" do
-    it 'should support Proc interface' do
-      mod.step(:foo) {}
-      expect(mod).to respond_to(:step_foo)
+  describe "#[]" do
+    context 'when step defined' do
+      it do
+        mod.step(:foo) {}
+        expect(mod[:foo]).to respond_to(:call)
+      end
+    end
+
+    context 'when step undefined' do
+      it do
+        expect(mod[:foo]).to be_nil
+      end
     end
   end
 
