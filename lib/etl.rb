@@ -1,5 +1,3 @@
 require "etl/version"
 require 'etl/workflow'
-
-module Etl
-end
+require 'etl/topology'

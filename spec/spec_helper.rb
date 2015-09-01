@@ -1,8 +1,9 @@
-require "rubygems"
-begin
-  require "rspec"
-rescue LoadError
-  require "spec"
+require 'bundler/setup'
+Bundler.setup
+
+require 'etl'
+
+RSpec.configure do |config|
+  # some (optional) config here
 end
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'etl'))
