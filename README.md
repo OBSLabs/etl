@@ -1,3 +1,55 @@
+Virool ETL is an approach to DSL organization.
+
+
+### How it works
+Workflow is a sequential set of neccessary & sufficient operations to load the data into the end target.
+It is the stand alone unit that has a clear entry point (inital state), set of operations and end target.
+set of operations could be grouped into 3 parts
+* Extract
+Extracts data from the source system, normalizes and combines it together.
+* Transform
+Transform extracted data according its end target format.
+* Load
+Load data to into the end target system.
+
+None of the parts know about each other and the workflow is something that conduct communication between them.
+Each part consists of one or several steps which are mutually independend and part conduct communication between them.
+
+
+
+
+The first part of ETL process involves extracting data from the source system
+
+workflow is broken under independant pieces (usually it is Extract, Transform and Load).
+
+
+
+Each piece (is a workflow by itself) consist one or several steps.
+Root Workflow initialize the initial state and passes it though the
+State gets into the first step.
+* Incremental state
+State is a object that goes in to the step and step returns the next value of state.
+State can be mutable and immutable at sole discression.
+
+``` ruby
+# Immutable, merge returns a new hash.
+step :foo do |state|
+  state.merge({foo: :bar})
+end
+
+#Mutable, modifying existing object.
+
+step :foo do |state|
+  state[:foo] = :bar
+  state
+end
+```
+
+
+
+* Stateless Workflow
+* Identifable steps
+
 This gem provide a DSL to describe Extract Transform Load Workflows.
 
 Means of abstraction.
