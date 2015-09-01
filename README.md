@@ -11,7 +11,7 @@ set of operations could be grouped into 3 parts
 Part | Responsibility | Typical actions
 ---|-----|-----
 Extract | Extracts data from the source system, normalizes and combines it together. | SQL select, read file, HTTP GET request, S3 read, redis read, group array by ID, map hash into object.
-
+---|-----|-----
 
 * Transform
 Transforms extracted data according end target format.
