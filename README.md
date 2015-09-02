@@ -1,14 +1,39 @@
-Virool ETL is an approach of threading state through sequence of stateless data transformation operations.
-It provides a lightweight DSL (>100 lines of code) and the result code is absolutely linear and easy to understand. 
+## Welcome to Virool Etl
 
-Designed with a regard to:
-* Single Responsiblity. Workflows and steps have one responsibility.
-* High cohision. Workflows and steps communicate with each other via contract (State)
-* Low coupling. Workflows and steps are not aware about each other. Each Workflow could be used independently.
-* Modularity. Each workflow has well defined interface which is a great subject to test.
-* Pattern. The one way to implement data transformation workflow. Valuable in a large projects.
+Virool Etl is library that includes everything needed to solve complex data transformation inside ruby application according OOP best practices.
 
-### How it works
+The basic idea behind it is to separate transformation state and stateless transforming operations (workflow).
+Workflow starts with a initial state (injected from outside) and incrementally fill the state following throughout steps.
+
+Another idea is that workflows are composable. A typical approach is to have one workflow to extact data, another to transform them and the last one load data to external device(persist) (ETL).
+
+Virool Etl provides an simple and yet universal DSL to describe workflow and the result code is linear and easy to understand.
+
+This gem is super lightweight (just about 100 LOC) and does not affect performance of the host application.
+
+## Getting Started
+
+Add the following code to Gemfile
+```ruby
+gem 'etl', :git => 'git://github.com/OBSLabs/etl.git'
+```
+and run `bundle install`
+
+Now `Etl::Workflow` module is available in the application.
+
+The next step is create a brand new workflow.
+```ruby
+module MyWorkflow
+  extend Etl::Workflow
+  step do |x|
+    x + 10
+  end
+end
+```
+
+To eval workflow: `MyWorkflow.run(32) #=> 42 `
+
+## How it works
 
 Workflow is a sequential set of neccessary & sufficient operations to load the data into the end target. 
 Workflow is stateless and state is passed from one step/workflow to another. The root workflow defines the initial state. 
@@ -24,7 +49,7 @@ Load | Load data to into the end target system. | SQL insert/update/delete, writ
 None of the parts know about each other and the workflow is something that conduct communication between them.
 Each part consists of one or several steps which are mutually independend and data fall from one step into another.
 
-### Composing steps to make workflow
+## Composing steps to make workflow
 Step is a atomic part of a workflow. There could be any number of steps in workflow. Each step is a stateless ruby block that receive a state object as a single argument and returns a new version of the state.
 Workflow could be evaluated by sequentially evaluating each of its steps:
 * take the initial value
@@ -49,7 +74,7 @@ end
 is an equivalent of `c(b(a(...)))` or in clojure `(->> ... (a) (b) (c))`
 
 
-### Composing workflows
+## Composing workflows
 Workflow might be a composition of serveral workflows. In this case workflow behave the same way as a regular step.
 
 ```ruby
@@ -71,7 +96,7 @@ end
 is equvalent of `C.call(B.call(A.call)))`
 The root workflow is responsible for definition of the initial state and providing a clear entry point (public interface).
 
-### Incremental state
+## Incremental state
 State is a object that goes into the step and step returns the next value of state (very similar to monad).
 State can be mutable or immutable
 ``` ruby
@@ -87,7 +112,7 @@ step :foo do |state|
 end
 ```
 
-### Typical operations
+## Typical operations
 ##### Set state attribute
 ```ruby
 step do |state|
@@ -116,8 +141,8 @@ push do |state|
 end
 ```
 
-### Testing
-Workflow has a "#[]" accessor to steps that returns lambda so step could be tested as regular ruby method:
+## Testing
+Workflow has a "#[]" accessor to steps that returns Proc so step could be tested as regular ruby method:
 ```ruby
 module Foo
   step :inc do |state|
@@ -136,7 +161,7 @@ As long each step is using only a trivial portion of state it's very simple to m
 
 
 
-### Example workflow
+## Example workflow
 
 ```ruby
 require 'etl'
@@ -199,7 +224,7 @@ end
 puts SomeEtl.run(SomeEtl::State.new).inspect
 ```
 
-### License
+## License
 
-ETL is released under the [MIT License](http://opensource.org/licenses/MIT).
+Virool Etl is released under the [MIT License](http://opensource.org/licenses/MIT).
 
