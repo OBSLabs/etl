@@ -199,5 +199,7 @@ end
 puts SomeEtl.run(SomeEtl::State.new).inspect
 ```
 
+### License
 
+ETL is released under the [MIT License](http://opensource.org/licenses/MIT).
 
