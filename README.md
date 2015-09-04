@@ -1,3 +1,4 @@
+[![Code Climate](https://circleci.com/gh/OBSLabs/etl.png?circle-token=:circle-token)](https://circleci.com/gh/OBSLabs/etl.png?circle-token=:circle-token)
 ## Welcome to Virool Etl
 
 Virool Etl is a library that includes everything needed to solve complex data transformation inside ruby application according to OOP best practices.
