@@ -6,7 +6,7 @@ Virool Etl is a library that includes everything needed to solve complex data tr
 The basic idea behind it is to separate transformation state and stateless transforming operations (workflow).
 Workflow starts with a initial state (injected from outside) and incrementally fill the state following throughout steps.
 
-Another idea is that workflows are composable. A typical approach is to have one workflow to extact data, another to transform them and the last one load data to external device(persist) (ETL).
+Another idea is that workflows are composable. A typical approach is to have one workflow to extract data, another to transform them and the last one load data to external device(persist) (ETL).
 
 Virool Etl provides an simple and yet universal DSL to describe workflow and the result code is linear and easy to understand.
 
